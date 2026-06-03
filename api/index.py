@@ -5,20 +5,17 @@ import json
 
 app = FastAPI()
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["*"],
+    allow_methods=["POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
-with open("q-vercel-latency.json") as f:
+with open("q-vercel-latency.json", "r") as f:
     DATA = json.load(f)
-
-@app.options("/{path:path}")
-async def options_handler(path: str):
-    return {}
 
 @app.post("/api/latency")
 async def latency(req: dict):
@@ -29,6 +26,9 @@ async def latency(req: dict):
 
     for region in regions:
         rows = [r for r in DATA if r["region"] == region]
+
+        if not rows:
+            continue
 
         latencies = [r["latency_ms"] for r in rows]
         uptimes = [r["uptime_pct"] for r in rows]
