@@ -8,14 +8,14 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["POST"],
+    allow_methods=["*"],
     allow_headers=["*"]
 )
 
 with open("q-vercel-latency.json") as f:
     DATA = json.load(f)
 
-@app.post("/api/latency")
+@app.post("/")
 async def latency(req: dict):
     regions = req["regions"]
     threshold = req["threshold_ms"]
