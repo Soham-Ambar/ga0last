@@ -2,25 +2,23 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import json
-from pathlib import Path
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-data_file = Path(__file__).parent.parent / "q-vercel-latency.json"
-
-with open(data_file, "r") as f:
+with open("q-vercel-latency.json") as f:
     DATA = json.load(f)
 
-@app.get("/")
-def root():
-    return {"status": "ok"}
+@app.options("/{path:path}")
+async def options_handler(path: str):
+    return {}
 
 @app.post("/api/latency")
 async def latency(req: dict):
