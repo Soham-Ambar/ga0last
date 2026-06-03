@@ -23,6 +23,9 @@ async def add_cors_headers(request, call_next):
 
 with open("q-vercel-latency.json") as f:
     DATA = json.load(f)
+@app.get("/api/latency")
+async def latency_get():
+    return {"status": "ok"}
 
 @app.post("/api/latency")
 async def latency(req: dict):
