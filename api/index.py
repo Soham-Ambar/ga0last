@@ -72,4 +72,8 @@ async def latency(req: dict):
             "breaches": sum(1 for x in latencies if x > threshold)
         }
 
-    return JSONResponse(content=result)
+    return JSONResponse(
+    content={
+        "regions": result
+    }
+)
